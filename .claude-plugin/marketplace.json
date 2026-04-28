@@ -10,7 +10,7 @@
       "name": "claude-tab-titles",
       "source": "./plugins/claude-tab-titles",
       "description": "Updates terminal tab title with ✅/❓ status emojis and a Haiku-summarized topic, so you can glance across tabs and see which Claude sessions are done, waiting, or working.",
-      "version": "0.1.0"
+      "version": "0.1.1"
     }
   ]
 }

@@ -89,7 +89,7 @@ fi
 # summarize the user's first message into a tab-friendly title (<50 chars).
 # The keeper picks up the cached title on its next iteration. Cost: one Haiku
 # call per session (~$0.0001).
-if [ "$mode" = "clear" ] && [ -n "$CACHE" ] && [ ! -s "$CACHE" ] && [ -f "$transcript_path" ]; then
+if [ "$mode" = "clear" ] && [ -z "$CLAUDE_TAB_TITLES_DISABLE_HAIKU" ] && [ -n "$CACHE" ] && [ ! -s "$CACHE" ] && [ -f "$transcript_path" ]; then
   first_msg=$(jq -rs '
     map(select(.message.role == "user" and (.message.content | type == "string")))
     | .[0].message.content // empty
