@@ -1,5 +1,7 @@
 # claude-tab-titles
 
+[![tests](https://github.com/gabsn/claude-tab-titles/actions/workflows/test.yml/badge.svg)](https://github.com/gabsn/claude-tab-titles/actions/workflows/test.yml)
+
 A Claude Code plugin that turns your terminal tab title into a live status board for your Claude sessions.
 
 | State | Tab title example |
@@ -105,13 +107,25 @@ The script writes to `$TMPDIR/claude-title-*` and `$TMPDIR/claude-title-keeper-*
 ```bash
 git clone git@github.com:gabsn/claude-tab-titles.git
 cd claude-tab-titles
+
+# Run the test suite (22 tests, ~1s, no real Haiku call).
+bash tests/test.sh
+
+# Validate manifests against the Claude Code schema.
 claude plugin validate plugins/claude-tab-titles
 claude plugin validate .
+
 # Add as a local marketplace for live iteration:
 claude plugin marketplace add "$(pwd)"
 claude plugin install claude-tab-titles@claude-tab-titles
 # After edits: claude plugin marketplace update claude-tab-titles
 ```
+
+The script exposes two test seams used by `tests/test.sh`:
+- `CLAUDE_TAB_TITLES_TTY=<path>` — write OSC sequences to a file instead of `/dev/tty`. Lets tests assert on the bytes that would have hit the terminal.
+- `CLAUDE_TAB_TITLES_NO_KEEPER=1` — skip the 10-minute background keeper loop. Useful for tests and for users who don't need the focus-event protection.
+
+CI runs the suite on Ubuntu and macOS via GitHub Actions on every push.
 
 PRs welcome.
 

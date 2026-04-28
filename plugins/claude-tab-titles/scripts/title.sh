@@ -11,6 +11,8 @@ mode=$1
 CACHE_DIR="${TMPDIR:-/tmp}"
 PIDFILE="$CACHE_DIR/claude-title-keeper-$PPID.pid"
 LOG="${CLAUDE_TAB_TITLES_DEBUG_LOG:-}"
+# Test seams: override the tty target and disable the background keeper.
+TTY_PATH="${CLAUDE_TAB_TITLES_TTY:-/dev/tty}"
 
 log() {
   [ -n "$LOG" ] || return 0
@@ -55,7 +57,7 @@ read_title() {
 }
 
 write_title() {
-  { printf '\033]0;%s\007\033]2;%s\007' "$1" "$1" >/dev/tty; } 2>/dev/null
+  { printf '\033]0;%s\007\033]2;%s\007' "$1" "$1" >>"$TTY_PATH"; } 2>/dev/null
 }
 
 # Kill any previous keeper so only one is running per Claude process.
@@ -71,7 +73,7 @@ write_title "${prefix}$(read_title)"
 # every second for up to 10 minutes. Without it, Claude Code's own auto-titling
 # strips our prefix on focus events. The keeper exits when /dev/tty is no longer
 # writable (e.g. terminal closed) or when killed by the next hook invocation.
-if [ "$mode" = "set" ] || [ "$mode" = "ask" ]; then
+if { [ "$mode" = "set" ] || [ "$mode" = "ask" ]; } && [ -z "$CLAUDE_TAB_TITLES_NO_KEEPER" ]; then
   (
     for _ in $(seq 1 600); do
       sleep 1
