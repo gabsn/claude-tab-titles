@@ -1,0 +1,9 @@
+{
+  "name": "claude-tab-titles",
+  "description": "Live tab-title status indicators for Claude Code (✅ done, ❓ waiting on you), plus a Haiku-summarized session topic.",
+  "version": "0.1.0",
+  "author": {
+    "name": "gabsn",
+    "url": "https://github.com/gabsn"
+  }
+}
